@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/redactor/static/css/main.4779392f.css",
+    "main.js": "/redactor/static/js/main.2a81ea39.js",
+    "index.html": "/redactor/index.html",
+    "main.4779392f.css.map": "/redactor/static/css/main.4779392f.css.map",
+    "main.2a81ea39.js.map": "/redactor/static/js/main.2a81ea39.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4779392f.css",
+    "static/js/main.2a81ea39.js"
+  ]
+}
