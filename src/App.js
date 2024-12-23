@@ -1,44 +1,56 @@
 
 
 import { useState } from 'react';
+
+import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
+
 import styles from './App.module.scss';
+import CodeEditor from './ui/codeEditor/codeEditor';
+import { LANGUAGE_VERSIONS } from './constants';
+import LanguageItem from './ui/languageItem/languageItem';
+import Output from './ui/output/output';
+import checkAnswer from './api';
 
 function App() {
 
-  const [language, setLanguage] = useState('Go') // Python | Go
-  console.log(language)
+  const languages = Object.entries(LANGUAGE_VERSIONS) // Забираем данные языков программирования
 
-  function handleSubmit(e) {
-    // Prevent the browser from reloading the page
-    e.preventDefault();
-    // Read the form data
-    const form = e.target;
-    const formData = new FormData(form);
-    // You can pass formData as a fetch body directly:
-    fetch('/some-api', { method: form.method, body: formData });
-    // You can generate a URL out of it, as the browser does by default:
-    console.log(new URLSearchParams(formData).toString());
-    // You can work with it as a plain object.
-    const formJson = Object.fromEntries(formData.entries());
-    console.log(formJson); // (!) This doesn't include multiple select values
-    // Or you can get an array of name-value pairs.
-    console.log([...formData.entries()]);
+  const [language, setLanguage] = useState('javascript') // PHP | JavaScript
+
+  const [editorValue, setEditorValue] = useState('') // Содержимое редактора
+
+  const [output, setOutput] = useState('Output') // Значение поля Output
+
+  // Валидация введенного кода
+  async function runCode (language, editorValue) {
+    if (!editorValue) return null;
+    try {
+      const result = await checkAnswer(language, editorValue);
+      setOutput(result ? result : 'Output') // Если пришло корректное значение, показываем его. Если нет - показываем надпись 'Output
+    } catch (error) {
+      throw new Error ('Something went wrong');
+    }
   }
 
   return (
     <div className={styles.App}>
       <header className={styles.header}>
         <h1 className={styles.taskName}>Task name</h1>
-        <button className={styles.btnRun} type='submit'>Run</button>
+        <button className={styles.btnRun} type='submit' onClick={()=> runCode(language, editorValue)}>Run</button>
       </header>
       <div className={styles.container}>
         <section className={styles.task}>
-          <form method='post' onSubmit={handleSubmit}>
+          <form method='post'>
             <label className={styles.titleDescription}> 
               <p className={styles.titleDescription}>Language</p>
-              <select className={styles.selectLanguage} name="selectedFruit">
-                <option className={styles.option} value='Go' onClick={()=> setLanguage('Go')}>Go</option>
-                <option className={styles.option} value='Python' onClick={()=> setLanguage('Python')}>Python</option>
+              <select value={language} className={styles.selectLanguage} name="selectedFruit" onChange={e => setLanguage(e.target.value)}>
+                {languages.map((lang) => <LanguageItem 
+                                            key={lang[0]} 
+                                            className={styles.option} 
+                                            value={lang[0]} 
+                                            onClick={setLanguage} 
+                                            selectedLanguage={language}>
+                                            </LanguageItem>)}
               </select>
             </label>
             <p className={styles.difficulty}>Easy</p>
@@ -65,12 +77,11 @@ function App() {
 
         </section>
         <section className={styles.code}>
-
+          <CodeEditor handleEditorChange={setEditorValue} language={language} value={editorValue}></CodeEditor>
         </section>
       </div>
-      <div className={styles.results}>
-
-      </div>
+      <h2 className={styles.taskName}>Output</h2>
+      <Output value={output}></Output>
     </div>
   );
 }

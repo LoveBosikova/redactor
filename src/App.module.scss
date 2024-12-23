@@ -1,6 +1,6 @@
 .App {
   text-align: left;
-  width: 99vw;
+  width: 97vw;
   height: auto;
   min-height: 90vh;
   background-color: rgb(224, 224, 224);
@@ -36,6 +36,8 @@
   border-radius: 8px;
   background-color: rgb(231, 231, 231);
   padding: 2vw;
+  margin-bottom: 2vw;
+  display: flex;
 }
 
 .task {
@@ -47,14 +49,35 @@
   border: 1px solid rgb(190, 190, 190);
   border-radius: 8px;
   outline: none;
-  padding: .5vw;
-}
-
-.option {
-  padding: .3vw .5vw;
+  padding: .8vw;
 }
 
 .titleImg {
   width: 1vw;
   height: 2vw;
+}
+
+.difficulty {
+  width: 5%;
+  min-width: 5%;
+  max-width: max-content;
+  text-align: left;
+  padding: 0.5vw 1vw;
+  border-radius: 8px;
+  border: 1px solid green;
+}
+
+.title {
+  border-top: 1px solid rgb(190, 190, 190);
+  padding-top: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1%;
+}
+
+.code {
+  width: 49%;
+  margin-left: auto;
+  margin-right: auto;
 }
